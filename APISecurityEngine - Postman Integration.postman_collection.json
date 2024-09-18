@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "8efd192b-20b1-4c6a-9816-2edfb4d1ee48",
+		"name": "APISecurityEngine - Postman Integration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Run Scan on A Postman collection by collection id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response JSON",
+							"var jsonData = pm.response.json();",
+							"",
+							"// Create an HTML template",
+							"var template = `",
+							"<html>",
+							"<head>",
+							"    <style>",
+							"        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }",
+							"        .container { margin: 20px; }",
+							"        h1 { color: #2c3e50; }",
+							"        h2 { color: #34495e; margin-top: 20px; }",
+							"        .vulnerability { background-color: #f9f9f9; padding: 15px; margin-bottom: 20px; border-radius: 5px; }",
+							"        .severity { font-weight: bold; }",
+							"        .severity.HIGH { color: #c0392b; }",
+							"        .severity.MEDIUM { color: #e67e22; }",
+							"        .severity.LOW { color: #f1c40f; }",
+							"        ul { padding-left: 20px; }",
+							"    </style>",
+							"</head>",
+							"<body>",
+							"    <div class=\"container\">",
+							"        <h2>Scan Result</h2>",
+							"        ${jsonData.scanResult.vulnerabilities.map(vuln => `",
+							"            <div class=\"vulnerability\">",
+							"                <h3>${vuln.vulnerability.vulnerabilityName}</h3>",
+							"                <p><strong>Severity:</strong> <span class=\"severity ${vuln.severity}\">${vuln.severity}</span></p>",
+							"                <p><strong>Priority:</strong> ${vuln.priority}</p>",
+							"                <p><strong>Description:</strong> ${vuln.description}</p>",
+							"                <p><strong>Findings:</strong> ${vuln.findings.join(', ')}</p>",
+							"                <h4>OWASP Categories:</h4>",
+							"                <ul>",
+							"                    ${vuln.vulnerability.owasp.map(o => `<li>${o}</li>`).join('')}",
+							"                </ul>",
+							"                <h4>CWE Categories:</h4>",
+							"                <ul>",
+							"                    ${vuln.vulnerability.cwe.map(c => `<li>${c}</li>`).join('')}",
+							"                </ul>",
+							"                <h4>Remediations:</h4>",
+							"                <div>${vuln.remediation}</div> <!-- Render raw HTML content -->",
+							"            </div>",
+							"        `).join('')}",
+							"    </div>",
+							"</body>",
+							"</html>",
+							"`;",
+							"",
+							"// Set the visualization",
+							"pm.visualizer.set(template, jsonData);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzBiOTk0ZmJhMmU1ZDJjZmY0MGUwYyIsImlhdCI6MTcyMjk1NTg1NiwiZXhwIjoxNzMwNzMxODU2fQ.HuLEUtsc-XW03OseNvwAHrw7RaS0HNcNbRBm66J9M0fsjk9WB313JugBs4ZQDlkOUdBWx4064B8sV1hRxJsJe0uxk41UqSzOStGCmsKJSrkRzuw8uJW9czYbd09hIJf2IQ-gGPW6E7GCiGUEXwnXb628xs3QpRUP8i4yt06wWOfcCsj-_-HJbaXxmTZEiVoTi1IFG0hWDcCtPYNyuH41ZDlGmHeAxsJEyox1jbDxP-iWXo5NLIMJC2hm8KI7t-TwzE0_JKXad1K43aI4j0kcVk3yL8R5PO0OpaGqYl26ZkM9fa2r7aSBGqNXrozGUozQldvS7t-n8mDA_26h-Ycqbx9Ce1-XVw9gP7P8G_1985GhhukvcNE0o8DTREI80alyHeVEW-CMeis-r5qrV33k3j__VTUkvskIJG4aB_fcmHh1vd3KZkaiIOxvm_HoOcryNaP2lE3OVolYmXpC_VncvNSruTv3FJrUoCWmB_DJrWdAdLOx3p6PQZEh6mtAGd6iPvitQz_jeYaO-hRUGWDdZnOcmA7LdKmSHrjEGbuCGNFm_ybokjBWeq93vIl6FqBrOxyZLNYEjtthbIuJjeb0TEV63BiFbVyk0sYHSFe9o6h8U11w9D02B0puhgwQl-fKvgJX1m0JuLCJk7lQOLsQu-7ZgLRB3uScy48fbr_DB_I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"collectionID\":\"71a092c6-954b-4623-8747-a52a990243d1\",\n    \"apisecurityengineClientId\":\"c88ebeea40c501a5b2b91601fb763d5f\",\n    \"apisecurityengineClientSecret\":\"7a2855f626129183570d0f904136a86822a3d5d57857139150408b3443f8702b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://backend-new.apisecurityengine.com/api/v1/activeScans/runScanFromPostman",
+					"protocol": "https",
+					"host": [
+						"backend-new",
+						"apisecurityengine",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"activeScans",
+						"runScanFromPostman"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
